@@ -116,28 +116,28 @@ public final class FastMap<K,V> implements Map<K,V>, Serializable, Cloneable {
   
   private int find(Object key) {
     int theHashCode = key.hashCode() & 0x7FFFFFFF; // make sure it's positive
-    K[] keys = this.keys;
-    int hashSize = keys.length;
+    K[] keysArray = this.keys;
+    int hashSize = keysArray.length;
     int jump = 1 + theHashCode % (hashSize - 2);
     int index = theHashCode % hashSize;
-    K currentKey = keys[index];
+    K currentKey = keysArray[index];
     while (currentKey != null && !key.equals(currentKey)) {
       index -= index < jump ? jump - hashSize : jump;
-      currentKey = keys[index];
+      currentKey = keysArray[index];
     }
     return index;
   }
 
   private int findForAdd(Object key) {
     int theHashCode = key.hashCode() & 0x7FFFFFFF; // make sure it's positive
-    K[] keys = this.keys;
-    int hashSize = keys.length;
+    K[] keysArray = this.keys;
+    int hashSize = keysArray.length;
     int jump = 1 + theHashCode % (hashSize - 2);
     int index = theHashCode % hashSize;
-    K currentKey = keys[index];
+    K currentKey = keysArray[index];
     while (currentKey != null && currentKey != REMOVED && key != currentKey) {
       index -= index < jump ? jump - hashSize : jump;
-      currentKey = keys[index];
+      currentKey = keysArray[index];
     }
     if (currentKey != REMOVED) {
       return index;
@@ -146,7 +146,7 @@ public final class FastMap<K,V> implements Map<K,V>, Serializable, Cloneable {
     int addIndex = index;
     while (currentKey != null && key != currentKey) {
       index -= index < jump ? jump - hashSize : jump;
-      currentKey = keys[index];
+      currentKey = keysArray[index];
     }
     return key == currentKey ? index : addIndex;
   }
